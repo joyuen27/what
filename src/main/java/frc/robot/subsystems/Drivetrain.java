@@ -8,6 +8,7 @@ public class Drivetrain extends SubsystemBase{
 
     public Drivetrain(){
         //0 and 1 are the PWM numbers these motor controllers are plugged into on the roboRIO.
+        //These can technically be initialized either in or out the constructor.
         leftMotor = new VictorSP(0); 
         rightMotor = new VictorSP(1);
         rightMotor.setInverted(true);
