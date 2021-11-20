@@ -7,8 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ArmControl;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,20 +31,37 @@ public class RobotContainer {
   private Joystick rightJoy = new Joystick(1);
 
   private Drivetrain drivetrain = new Drivetrain();
-
+  private Arm arm = new Arm();
+  private ArmControl armControl = new ArmControl(arm, leftJoy, rightJoy);
 
   //Find the right axes values on either the simulator or driverstation.
-  private Drive drive = new Drive(drivetrain, leftJoy.getRawAxis(0), rightJoy.getRawAxis(1)); 
+  private Drive drive = new Drive(drivetrain, leftJoy, rightJoy); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
     //Remember to do this.
     drivetrain.setDefaultCommand(drive);
-
+    arm.setDefaultCommand(armControl);
 
     // Configure the button bindings
     configureButtonBindings();
+  }
+
+  public boolean leftJoyButton(int index) {
+    return leftJoy.getRawButton(index);
+  }
+  public boolean rightJoyButton(int index) {
+    return rightJoy.getRawButton(index);
+  }
+
+  private static RobotContainer instance;
+  public static RobotContainer getInstance() {
+    if (instance == null)
+    {
+      instance = new RobotContainer();
+    }
+    return instance;
   }
 
   /**
@@ -61,5 +80,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+  public Command getTeleopCommand() {
+    // An ExampleCommand will run in autonomous
+    return drive;
   }
 }

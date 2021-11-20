@@ -1,27 +1,37 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arm;
+import frc.robot.RobotContainer;
 
-
-public class Drive extends CommandBase{
-    private Drivetrain drivetrain;
+public class ArmControl extends CommandBase {
+    private Arm arm;
     private Joystick leftJoy, rightJoy;
-    public Drive(Drivetrain drivetrain, Joystick leftJoy, Joystick rightJoy){
-        this.drivetrain = drivetrain;
+    public ArmControl(Arm arm, Joystick leftJoy, Joystick rightJoy){
+        this.arm = arm;
 
         this.leftJoy = leftJoy;
 
         this.rightJoy = rightJoy;
 
         //Tell the command which subsystem it needs to use.
-        addRequirements(drivetrain); 
+        addRequirements(arm); 
     }
 
     @Override
     public void execute() {
-        drivetrain.drive(leftJoy.getRawAxis(1),-rightJoy.getRawAxis(1)); 
+        if(leftJoy.getRawButton(1)) {
+            arm.moveArm(0.75);
+        }
+        else if(rightJoy.getRawButton(1)) {
+            arm.moveArm(-0.75);
+        }
+        else {
+            arm.moveArm(0);
+        }
     }
 
 
