@@ -21,7 +21,7 @@ public class Drive extends CommandBase{
 
     @Override
     public void execute() {
-        drivetrain.drive(leftJoy.getRawAxis(1),-rightJoy.getRawAxis(1)); 
+        drivetrain.drive(-leftJoy.getRawAxis(1),-rightJoy.getRawAxis(1)); 
     }
 
 

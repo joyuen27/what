@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmControl;
+import frc.robot.commands.AutoArmCommand;
+import frc.robot.commands.AutoCommand;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Arm;
@@ -25,7 +27,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private Joystick leftJoy = new Joystick(0);
   private Joystick rightJoy = new Joystick(1);
@@ -33,6 +34,7 @@ public class RobotContainer {
   private Drivetrain drivetrain = new Drivetrain();
   private Arm arm = new Arm();
   private ArmControl armControl = new ArmControl(arm, leftJoy, rightJoy);
+  
 
   //Find the right axes values on either the simulator or driverstation.
   private Drive drive = new Drive(drivetrain, leftJoy, rightJoy); 
@@ -79,7 +81,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    return new AutoCommand(drivetrain, 0.5, 0.5, 1.6)
+    .andThen(new AutoCommand(drivetrain, -0.7,0.7, 0.5))
+    .andThen(new AutoCommand(drivetrain, .47, 0.47, 1.5))
+    .andThen(new AutoArmCommand(arm,.5, 0.75))
+    .andThen(new AutoArmCommand(arm,-.2, 0.40))
+    .andThen(new AutoArmCommand(arm,.1, .1))
+    .andThen(new AutoCommand(drivetrain, -.5, -0.5, .75))
+    .andThen(new AutoCommand(drivetrain, -0.75, 0.75, 0.55))
+    .andThen(new AutoCommand(drivetrain,-.5, -.5, 1.35))
+    .andThen(new AutoCommand(drivetrain, 0.75, -0.75, 0.55));
+
   }
   public Command getTeleopCommand() {
     // An ExampleCommand will run in autonomous
